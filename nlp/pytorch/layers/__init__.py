@@ -9,7 +9,6 @@
 #   Imports
 # -------------------------------------------------------------------------
 from .transformer import (
-    Transformer,
     TransformerEncoder,
     TransformerDecoder,
     TransformerEncoderLayer,
