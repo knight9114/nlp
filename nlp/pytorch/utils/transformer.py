@@ -5,6 +5,7 @@
 from typing import Tuple
 import numpy as np
 import torch
+from nlp.pytorch.utils import constants
 
 
 # -------------------------------------------------------------------------
@@ -18,7 +19,7 @@ Tensor = torch.Tensor
 # -------------------------------------------------------------------------
 def create_padding_mask(
         seq:Tensor,
-        pad_idx:int=0) -> Tensor:
+        pad_idx:int:constants.PAD_IDX) -> Tensor:
     """
     """
     return (seq == pad_idx).type(torch.float32)[:, np.newaxis, np.newaxis, :]
@@ -33,7 +34,7 @@ def create_look_ahead_mask(
 def create_masks(
         src:Tensor,
         tgt:Tensor,
-        pad_idx:int=0) -> Tuple[Tensor, Tensor]:
+        pad_idx:constants.PAD_IDX) -> Tuple[Tensor, Tensor]:
     """
     """
     # Create Encoder Mask
