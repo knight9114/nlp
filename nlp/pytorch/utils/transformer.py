@@ -2,7 +2,7 @@
 #   Transformer Utils
 # -------------------------------------------------------------------------
 # Imports
-from typing import Tuple
+from typing import Tuple, Dict
 import numpy as np
 import torch
 from nlp.pytorch.utils import constants
@@ -78,13 +78,13 @@ def create_transformer_dynamic_axes() -> Dict[str, Dict[int, str]]:
                 },
             'dec_mask': {
                 0: 'batch_size',
-                2: 'tgt_seq_len'
+                2: 'tgt_seq_len',
                 3: 'tgt_seq_len'
                 }
         }
 
 def create_transformer_dummy_inputs(
-        batch_size:int=64
+        batch_size:int=64,
         src_seq_len:int=64,
         tgt_seq_len:int=64) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
     """
