@@ -7,4 +7,4 @@
 # -------------------------------------------------------------------------
 #   Imports
 # -------------------------------------------------------------------------
-from . import layers, optimizers, models, utils
+from . import layers, optimizers, models, utils, data, losses
