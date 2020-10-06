@@ -55,3 +55,45 @@ def create_masks(
     dec_mask = torch.max(pad_mask, look_ahead_mask)
 
     return enc_mask, dec_mask
+
+
+# -------------------------------------------------------------------------
+#   ONNX Functions
+# -------------------------------------------------------------------------
+def create_transformer_dynamic_axes() -> Dict[str, Dict[int, str]]:
+    """
+    """
+    return {
+            'src': {
+                0: 'batch_size',
+                1: 'src_seq_len'
+                },
+            'tgt': {
+                0: 'batch_size',
+                1: 'tgt_seq_len'
+                },
+            'enc_mask': {
+                0: 'batch_size',
+                3: 'src_seq_len'
+                },
+            'dec_mask': {
+                0: 'batch_size',
+                2: 'tgt_seq_len'
+                3: 'tgt_seq_len'
+                }
+        }
+
+def create_transformer_dummy_inputs(
+        batch_size:int=64
+        src_seq_len:int=64,
+        tgt_seq_len:int=64) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
+    """
+    """
+    # Create Dummy Tokens
+    src = torch.randint(0, 100, [batch_size, src_seq_len])
+    tgt = torch.randint(0, 100, [batch_size, tgt_seq_len])
+
+    # Create Dummy Masks
+    enc_mask, dec_mask = create_masks(src, tgt)
+
+    return src, tgt, enc_mask, dec_mask

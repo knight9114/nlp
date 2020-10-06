@@ -23,3 +23,5 @@ EOS_TKN = '</S>'
 
 # Torch Constants
 DEFAULT_DEVICE = torch.device('cpu')
+DEFAULT_PARAM_KEY = 'parameters'
+DEFAULT_ATTR_KEY = 'attributes'

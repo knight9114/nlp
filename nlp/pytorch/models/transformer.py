@@ -2,10 +2,11 @@
 #   Transformer Model
 # -------------------------------------------------------------------------
 # Imports
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict, Any
 import torch
 from torch import nn
 
+from nlp.pytorch.utils import constants
 from nlp.pytorch.layers import (
     TransformerEncoder,
     TransformerDecoder,
@@ -74,6 +75,21 @@ class Transformer(nn.Module):
         # Create Dropout Layer
         self.dropout = nn.Dropout(f_dropout)
 
+        # Create Attributes
+        self.attributes = {
+            'n_src_vocab': n_src_vocab,
+            'n_tgt_vocab': n_tgt_vocab,
+            'n_layers': n_layers,
+            'd_model': d_model,
+            'n_heads': n_heads,
+            'd_ff': d_ff,
+            'f_dropout': f_dropout,
+            'preprocess': preprocess,
+            'postprocess': postprocess,
+            'max_src_len': max_src_len,
+            'max_tgt_len': max_tgt_len,
+        }
+        
     def forward(
             self,
             src:Tensor,
@@ -97,3 +113,24 @@ class Transformer(nn.Module):
 
         return logits, self_attn, mem_attn
 
+    def checkpoint(self) -> Tuple[Dict[str, Tensor], Dict[str, Any]]:
+        """
+        """
+        return self.state_dict(), self.attributes
+
+    def load(
+            ckpt_path:str,
+            attr_key:str=constants.DEFAULT_ATTR_KEY,
+            param_key:str=constants.DEFAULT_PARAM_KEY) -> nn.Module:
+        """
+        """
+        # Load Checkpoint
+        ckpt = torch.load(ckpt_path)
+
+        # Create Shell Transformer
+        net = Transformer(**ckpt[attr_key])
+
+        # Load Parameters
+        net.load_state_dict(ckpt[param_key], strict=True)
+
+        return net
