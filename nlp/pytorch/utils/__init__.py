@@ -12,4 +12,3 @@ from .transformer import (
 from .onnx import (
         convert_model_to_onnx
 )
-import constants

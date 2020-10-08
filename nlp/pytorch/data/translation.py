@@ -105,25 +105,16 @@ def create_dataset(
 def create_train_and_test_iterator(
         dataset:tt.data.Dataset,
         batch_size:int,
-        test_split:float=0.3,
+        test_split:float=0.25,
         ctx:torch.device=constants.DEFAULT_DEVICE) -> Tuple[tt.data.Iterator, tt.data.Iterator]:
         """
         """
-        # Split Dataset
-        train_data, test_data = dataset.split(1. - test_split)
-
         # Create Iterator
-        train = tt.data.BucketIterator(
-                dataset=train_data,
-                batch_size=batch_size,
-                shuffle=True,
-                device=ctx)
-
-        test = tt.data.BucketIterator(
-                dataset=test_data,
-                batch_size=batch_size,
-                train=False,
-                shuffle=False,
-                device=ctx)
+        train, test = tt.data.BucketIterator.splits( 
+                datasets=dataset.split(1. - test_split), 
+                batch_size=batch_size, 
+                shuffle=True, 
+                device=ctx,
+                sort=False)
 
         return train, test
